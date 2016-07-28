@@ -21,10 +21,10 @@ public class MeshInput extends JPanel{
         m.setLineWrap(true);
         m.setWrapStyleWord(true);
         
-        
         GridBagConstraints c = new GridBagConstraints();
         
         JScrollPane s = new JScrollPane(m);
+        s.setBackground(Color.decode("#ccebff"));
         c.gridwidth = GridBagConstraints.REMAINDER;
         c.fill = GridBagConstraints.BOTH;
         c.weightx = 1.0;

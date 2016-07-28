@@ -31,6 +31,8 @@ public class ConfigInput extends JPanel{
     
     public ConfigInput(Map<String, String> params){
     	setSize(400,400);
+    	setBackground(Color.decode("#ccebff"));
+    	//setBackground(Color.decode("#b3e0ff"));
         updateParams(params);
         
     }
@@ -60,7 +62,7 @@ public class ConfigInput extends JPanel{
         
         
                     JPanel j = new JPanel(new FlowLayout(FlowLayout.LEFT));
-                    //j.setBackground(Color.decode("#7EC4CF"));
+                    //j.setBackground(Color.decode("#99d6ff"));
                     
                     GroupLayout inputLayout = new GroupLayout(j);
                     inputLayout.setAutoCreateGaps(true);
@@ -124,7 +126,6 @@ public class ConfigInput extends JPanel{
         //System.out.println("Searching for user data...");
         File file = new File("su2/user_conf.cfg");
         if ( !file.exists() || file.isDirectory() ){
-            System.out.println("No user data found. Using default configurations.");
             this.loadDefaults();
             return;
         }

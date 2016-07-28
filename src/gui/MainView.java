@@ -55,7 +55,7 @@ public class MainView extends JFrame{
     
     public MainView(){
     	
-    	
+    	//this.setBackground(Color.decode("#1aa3ff"));
     	params = eulerParams();
     	//System.out.println(params);
         
@@ -66,7 +66,7 @@ public class MainView extends JFrame{
         
         
         p0 = new JPanel(new GridBagLayout());
-        //p0.setBackground(Color.decode("#52B2CF"));
+        p0.setBackground(Color.decode("#ccebff"));
         
         String[] problemTypes = {"EULER", "NAVIER_STOKES"};
         problemBox = new JComboBox<>(problemTypes);
@@ -74,6 +74,7 @@ public class MainView extends JFrame{
         JPanel boxPanel = new JPanel();
         boxPanel.add(new JLabel("Problem Type:"));
         boxPanel.add(problemBox);
+        boxPanel.setBackground(Color.decode("#ccebff"));
         
         configInput = new ConfigInput(params);
         meshInput = new MeshInput();
