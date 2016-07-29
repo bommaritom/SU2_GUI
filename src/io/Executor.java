@@ -4,6 +4,13 @@ import gui.Log;
 
 import java.io.*;
 
+/**
+ * SU2 relies on command-line prompts. This class helps interface between
+ * the GUI and the OS-native command-line console.  Currently only works
+ * on Unix-based systems.
+ * @author marcobom
+ *
+ */
 public class Executor{
 	public Log log;
 	
