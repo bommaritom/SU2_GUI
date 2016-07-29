@@ -8,4 +8,4 @@ This project is designed to provide an easy and user-friendly interface to SU2. 
 
 You will need to have installed SU2 (guide for installation can be found on https://github.com/su2code/SU2/wiki/Build-from-Source), including assigning the environment variables.
 
-Place SU2_GUI.jar and the folder su2 (which is the location of all SU2-native resources involved) in the same directory.
+Place SU2_GUI.jar and the folder su2 (which will be the location of all SU2-native resources involved) in the same directory.
