@@ -20,7 +20,10 @@ public class MainView extends JFrame{
 
 	public JPanel p0;
     
+	public JPanel pboxPanel;
 	public JComboBox<String> problemBox;
+	public JPanel tboxPanel;
+	public JComboBox<String> turbBox;
     public ConfigInput configInput;
     public Tabs tabs;
     public MeshInput meshInput;
@@ -29,10 +32,10 @@ public class MainView extends JFrame{
     public JButton s;
     public JButton b;
     
-    
     public Map<String, String> params;
     
-    public GridBagConstraints c;
+    public GridBagConstraints c = new GridBagConstraints();
+    
     
     public class ProblemActionListener implements ActionListener{
     	@SuppressWarnings("unchecked")
@@ -47,10 +50,19 @@ public class MainView extends JFrame{
     public void updateParams(String choice){
     	if (choice.equals("EULER")){
     		params = eulerParams();
+    		p0.remove(tboxPanel);
     	}else if (choice.equals("NAVIER_STOKES")){
     		params = navierParams();
+    		c.gridx = 0;
+        	c.gridy = 1;
+        	c.anchor = GridBagConstraints.CENTER;
+        	c.insets = new Insets(5,5,5,5);
+        	p0.add(tboxPanel, c);
     	}
     	configInput.updateParams(params);
+    	repaint();
+    	revalidate();
+    	
     }
     
     public MainView(){
@@ -69,12 +81,20 @@ public class MainView extends JFrame{
         p0.setBackground(Color.decode("#ccebff"));
         
         String[] problemTypes = {"EULER", "NAVIER_STOKES"};
+        String[] turbModel    = {"NONE", "SA", "SA_NEG", "SST"};
+        
         problemBox = new JComboBox<>(problemTypes);
         problemBox.addActionListener(new ProblemActionListener());
-        JPanel boxPanel = new JPanel();
-        boxPanel.add(new JLabel("Problem Type:"));
-        boxPanel.add(problemBox);
-        boxPanel.setBackground(Color.decode("#ccebff"));
+        pboxPanel = new JPanel();
+        pboxPanel.add(new JLabel("Problem Type:"));
+        pboxPanel.add(problemBox);
+        pboxPanel.setBackground(Color.decode("#ccebff"));
+        
+        turbBox = new JComboBox<>(turbModel);
+        tboxPanel = new JPanel();
+        tboxPanel.add(new JLabel("Turbulence Model:"));
+        tboxPanel.add(turbBox);
+        tboxPanel.setBackground(Color.decode("#ccebff"));
         
         configInput = new ConfigInput(params);
         meshInput = new MeshInput();
@@ -88,15 +108,15 @@ public class MainView extends JFrame{
         c.gridy = 0;
         c.anchor = GridBagConstraints.CENTER;
         c.insets = new Insets(5,5,5,3);
-        p0.add(boxPanel, c);
+        p0.add(pboxPanel, c);
         
         c.gridx = 0;
-        c.gridy = 1;
+        c.gridy = 2;
         c.anchor = GridBagConstraints.CENTER;
         c.insets = new Insets(5,5,5,5);
         p0.add(configInput, c);
         
-        c.gridheight = 5;
+        c.gridheight = 6;
         c.gridx = 1;
         c.gridy = 0;
         c.anchor = GridBagConstraints.CENTER;
@@ -167,21 +187,21 @@ public class MainView extends JFrame{
         GridBagConstraints c = new GridBagConstraints();
         c.gridheight = 1;
         c.gridx = 0;
-        c.gridy = 2;
+        c.gridy = 3;
         c.anchor = GridBagConstraints.PAGE_START;
         c.insets = new Insets(0,0,0,0);
         
         p0.add(d, c);
         
         c.gridx = 0;
-        c.gridy = 3;
+        c.gridy = 4;
         c.anchor = GridBagConstraints.PAGE_START;
         c.insets = new Insets(0,0,0,0);
         
         p0.add(s, c);
         
         c.gridx = 0;
-        c.gridy = 4;
+        c.gridy = 5;
         c.anchor = GridBagConstraints.PAGE_START;
         c.insets = new Insets(0,0,0,0);
         

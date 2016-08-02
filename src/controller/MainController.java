@@ -60,9 +60,10 @@ public class MainController{
     	
         Map<String, String> configs = formatConfigs(rawData.p1data, mainView.params);
         String problemType = (String)mainView.problemBox.getSelectedItem();
+        String turbModel = (String)mainView.turbBox.getSelectedItem();
         String mesh = rawData.p2data;
         
-        Config.write(configs, problemType);
+        Config.write(configs, problemType, turbModel);
         Mesh.write(mesh);
         
     }
