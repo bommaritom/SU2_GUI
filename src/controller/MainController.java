@@ -2,6 +2,7 @@ package controller;
  
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.FileNotFoundException;
 import java.util.*;
 
 import javax.swing.JPanel;
@@ -73,7 +74,8 @@ public class MainController{
     	try{
 	    	GraphPanels graphPanels     = new GraphPanels();
 	    	graph = graphPanels.sfGraph;
-    	}catch (Exception e){
+    	}catch (FileNotFoundException e){
+    		e.printStackTrace();
     		graph = null;
     	}
     	Log log                      = executor.log;

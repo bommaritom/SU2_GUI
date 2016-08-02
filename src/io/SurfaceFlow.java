@@ -6,16 +6,24 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.util.ArrayList;
 
-public class SurfaceFlow {
+import javax.swing.JFrame;
+import javax.swing.JOptionPane;
+
+
+
+public class SurfaceFlow{
+	
+	private String csvFileName;
 	
 	public ArrayList<String> Global_Index      		= new ArrayList<String>();
 	public ArrayList<String> x_coord 				= new ArrayList<String>();
 	public ArrayList<String> y_coord 				= new ArrayList<String>();
 	public ArrayList<String> Pressure 				= new ArrayList<String>();
 	public ArrayList<String> Pressure_Coefficient	= new ArrayList<String>();
-	public ArrayList<String> Mach_Number 			= new ArrayList<String>();
 	
-	public SurfaceFlow(String csvFileName){
+	public SurfaceFlow(String csvFileName) throws FileNotFoundException{
+		
+		this.csvFileName = csvFileName;
 		
 		BufferedReader br = null;
 		String line;
@@ -30,7 +38,6 @@ public class SurfaceFlow {
 				y_coord     			.add(point[2]);
 				Pressure    			.add(point[3]);
 				Pressure_Coefficient	.add(point[4]);
-				Mach_Number				.add(point[5]);
 			}
 			
 			Global_Index			.remove(0);
@@ -38,10 +45,7 @@ public class SurfaceFlow {
 			y_coord					.remove(0);
 			Pressure				.remove(0);
 			Pressure_Coefficient	.remove(0);
-			Mach_Number				.remove(0);
 			
-		} catch (FileNotFoundException e) {
-			e.printStackTrace();
 		} catch (IOException e) {
 			e.printStackTrace();
 		} finally {
@@ -54,6 +58,15 @@ public class SurfaceFlow {
 			}
 		}
 		
+	}
+	
+	public void sfError(){
+		JFrame frame = new JFrame("File Not Found");
+		JOptionPane.showMessageDialog(frame,
+				"Could not find " + csvFileName + "!\n"
+				+ "SU2 may not have executed properly.",
+				"Could not find " + csvFileName,
+				JOptionPane.ERROR_MESSAGE);
 	}
 
 }

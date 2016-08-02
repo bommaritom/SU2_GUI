@@ -16,6 +16,8 @@ public class Executor{
 	
     public void run(){
         
+    	deleteOldFiles();
+    	
         writeBash();
         runBash();
         
@@ -23,6 +25,20 @@ public class Executor{
         File shell = new File("run_bash_script.txt");
         if ( !shell.delete() ) shell.deleteOnExit();
         
+    }
+    
+    public void deleteOldFiles(){
+    	deleteFile("su2/flow.dat");
+    	deleteFile("su2/forces_breakdown.dat");
+    	deleteFile("su2/history.dat");
+    	deleteFile("su2/restart_flow.dat");
+    	deleteFile("su2/surface_flow.csv");
+    	deleteFile("su2/surface_flow.dat");
+    }
+    
+    public void deleteFile(String fileName){
+    	File file = new File(fileName);
+    	file.delete();
     }
     
     public void writeBash(){

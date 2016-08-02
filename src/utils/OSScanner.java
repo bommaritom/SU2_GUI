@@ -17,4 +17,10 @@ public class OSScanner {
 		return (os.indexOf("mac") >= 0);
 	}
 	
+	public static boolean isUnix() {
+
+		return (os.indexOf("nix") >= 0 || os.indexOf("nux") >= 0 || os.indexOf("aix") > 0 );
+		
+	}
+	
 }

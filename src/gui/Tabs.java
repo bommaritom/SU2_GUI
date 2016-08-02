@@ -23,17 +23,19 @@ public class Tabs extends JTabbedPane{
 		addTab("Mesh", meshInput);
 	}
 	
+	
 	public void update(Log l, JPanel g){
 		log    = l;
 		graph = g;
 		
 		int numOfTabs = this.getTabCount();
+		
 		//remove all tabs except the user input mesh
 		//need to remove the tab at index 1 each time because
 		//the tabs "slide" over each time you remove one
 		for ( int i = 1; i < numOfTabs; i++) this.remove(1);
 		
-		if ( log != null ) addTab("Log", log);
+		if ( log != null ) addTab("Console", log);
 		if ( graph != null) addTab("Surface Pressure", g);
 		
 		

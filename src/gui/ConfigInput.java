@@ -25,6 +25,7 @@ public class ConfigInput extends JPanel{
     	this.params = params;
     	createFields();
     	loadUser();
+    	
     	repaint();
     	revalidate();
     }
@@ -70,7 +71,7 @@ public class ConfigInput extends JPanel{
                     j.setLayout(inputLayout);
                 
                 
-                    /**We use GroupLayout to arrange the desired inputs*/
+                    /**Use GroupLayout to arrange the desired inputs*/
                     
                     /**This code implements a for
                        loop to adjust for any amount of parameters.*/
@@ -94,7 +95,7 @@ public class ConfigInput extends JPanel{
                     hGroup.addGroup(tempGroup);
                     /**/inputLayout.setHorizontalGroup(hGroup);
                     
-                    /**Now, the code creates the vertical group.  This is a series of rows
+                    /**Now, the code creates the vertical group – a series of rows
                        which each contain a label and its respective text input box.*/
                     GroupLayout.SequentialGroup vGroup = inputLayout.createSequentialGroup();
                     for ( int i = 0; i < labels.size(); i++ ) {

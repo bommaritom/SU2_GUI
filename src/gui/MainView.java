@@ -62,7 +62,7 @@ public class MainView extends JFrame{
         setTitle("SU2");
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         //setResizable(true);
-        setResizable(false);
+        //setResizable(false);
         
         
         p0 = new JPanel(new GridBagLayout());
@@ -104,9 +104,12 @@ public class MainView extends JFrame{
         p0.add(tabs, c);
         
         
+        
         add(p0);
         
         pack();
+        p0.setPreferredSize(p0.getMinimumSize());
+        setMinimumSize(this.getSize());
         setVisible(true);
         
         loadUser();
