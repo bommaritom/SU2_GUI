@@ -20,6 +20,7 @@ public class ConfigInput extends JPanel{
     private ArrayList<JLabel> labels;
     
     public void updateParams(Map<String,String> params){
+    	//completely redoes the fields with the new inputs
     	removeAll();
     	
     	this.params = params;
@@ -33,7 +34,6 @@ public class ConfigInput extends JPanel{
     public ConfigInput(Map<String, String> params){
     	setSize(400,400);
     	setBackground(Color.decode("#ccebff"));
-    	//setBackground(Color.decode("#b3e0ff"));
         updateParams(params);
         
     }
@@ -63,7 +63,6 @@ public class ConfigInput extends JPanel{
         
         
                     JPanel j = new JPanel(new FlowLayout(FlowLayout.LEFT));
-                    //j.setBackground(Color.decode("#99d6ff"));
                     
                     GroupLayout inputLayout = new GroupLayout(j);
                     inputLayout.setAutoCreateGaps(true);
@@ -122,21 +121,34 @@ public class ConfigInput extends JPanel{
         add(s, c);
     }
     
+    /**
+     * This is a more complex method; ConfigInput needs to
+     * fetch data from the necessary .cfg file and display
+     * it in the text fields. It is much simpler for ConfigInput
+     * to handle it internally instead of calling some function
+     * in MainController and relying on a returned array.
+     */
+    
     public void loadUser(){
+    	loadCFG("su2/user_conf.cfg");
+    }
+    
+    public void loadDefaults(){
+    	loadCFG("su2/default_conf.cfg");
+    }
+    
+    private void loadCFG(String fileName){
         
-        //System.out.println("Searching for user data...");
-        File file = new File("su2/user_conf.cfg");
+        File file = new File(fileName);
         if ( !file.exists() || file.isDirectory() ){
-            this.loadDefaults();
-            return;
+            fileName = "su2/default_conf.cfg";
         }
-        //System.out.println("User data found!");
         
         
         /**Read config_user.cfg and identify variable values; put them
          * in the text boxes.
          */
-        String fileName = "su2/user_conf.cfg";
+        
         
         BufferedReader br = null;
         
@@ -171,49 +183,16 @@ public class ConfigInput extends JPanel{
         }
     }
     
-    public void loadDefaults(){
-        
-        /**Same as loadConfigs, but using the unchanging file.*/
-        String fileName = "su2/default_conf.cfg";
-        BufferedReader br = null;
-        
-        try{
-            br = new BufferedReader(new FileReader(fileName));
-            
-            String line;
-            
-            while ( (line = br.readLine()) != null) {
-                int i = 0;
-                outerloop:
-                for ( Map.Entry<String, String> entry: params.entrySet() ) {
-                    if (line.contains(entry.getKey() + "=")){
-                        String recent = line.substring( (2 + line.indexOf("=")) );
-                        fields.get(i).setText(recent);
-                        i++;
-                        continue outerloop;
-                    }
-                    i++;
-                }
-            }
-        }catch(IOException e){
-            return;
-        }finally{
-            try {
-                if( br != null){
-                    br.close();
-                }      
-            } catch (IOException e){
-                //
-            }
-        }
-    }
     
     public ArrayList<String> getData(){
-    ArrayList<String> p1data = new ArrayList<String>();
+        ArrayList<String> p1data = new ArrayList<String>();
         for ( int i = 0; i < fields.size(); i++ ) {
             String temp = fields.get(i).getText();
             p1data.add(temp);
         }
         return p1data;
     }
+    
 }
+    
+   

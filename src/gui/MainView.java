@@ -67,22 +67,20 @@ public class MainView extends JFrame{
     
     public MainView(){
     	
-    	//this.setBackground(Color.decode("#1aa3ff"));
     	params = eulerParams();
-    	//System.out.println(params);
         
         setTitle("SU2");
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        //setResizable(true);
-        //setResizable(false);
         
         
         p0 = new JPanel(new GridBagLayout());
         p0.setBackground(Color.decode("#ccebff"));
         
+        //These options work better as dropdown menus, 
+        //so they cannot be handled by the loop in ConfigInput.
+        //In the case of "problemBox", the selection determines
+        //which options ConfigInput displays.
         String[] problemTypes = {"EULER", "NAVIER_STOKES"};
-        String[] turbModel    = {"NONE", "SA", "SA_NEG", "SST"};
-        
         problemBox = new JComboBox<>(problemTypes);
         problemBox.addActionListener(new ProblemActionListener());
         pboxPanel = new JPanel();
@@ -90,6 +88,9 @@ public class MainView extends JFrame{
         pboxPanel.add(problemBox);
         pboxPanel.setBackground(Color.decode("#ccebff"));
         
+        //Another option... but MainController handles
+        //and organizes all user input to MainView.
+        String[] turbModel    = {"NONE", "SA", "SA_NEG", "SST"};
         turbBox = new JComboBox<>(turbModel);
         tboxPanel = new JPanel();
         tboxPanel.add(new JLabel("Turbulence Model:"));

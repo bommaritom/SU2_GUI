@@ -37,13 +37,15 @@ public class Config{
                         continue outerloop;
                     }
                 }
+                
+                //parameters that cannot be handled in the loop
                 if (line.contains("PHYSICAL_PROBLEM= ")){
                 	line = ("PHYSICAL_PROBLEM= " + problemType);
                 }
                 if (line.contains("KIND_TURB_MODEL= ")){
                 	line = ("KIND_TURB_MODEL= " + turbModel);
                 }
-                /**If the code does not find a variable that should be changed, then it defaults:*/
+                //default:
                 bw.write(line + System.getProperty("line.separator"));
             } 
         } catch (Exception e) {

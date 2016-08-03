@@ -5,6 +5,8 @@ import java.awt.event.ActionListener;
 import java.io.FileNotFoundException;
 import java.util.*;
 
+import javax.swing.JFrame;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 
 import gui.GraphPanels;
@@ -58,11 +60,17 @@ public class MainController{
         
     	SU2Input rawData = mainView.getData();
     	
+    	//formatConfigs wraps data in a format that Config can 
+    	//easily write to the user_config.cfg file
         Map<String, String> configs = formatConfigs(rawData.p1data, mainView.params);
+        
+        
         String problemType = (String)mainView.problemBox.getSelectedItem();
         String turbModel = (String)mainView.turbBox.getSelectedItem();
+        
         String mesh = rawData.p2data;
         
+        //all inputs are then passed to the config and mesh file writers
         Config.write(configs, problemType, turbModel);
         Mesh.write(mesh);
         
@@ -71,17 +79,32 @@ public class MainController{
     public void run(){
     	Executor executor = new Executor();
     	executor.run();
-    	JPanel graph;
+    	
+    	JPanel sfGraph;
     	try{
 	    	GraphPanels graphPanels     = new GraphPanels();
-	    	graph = graphPanels.sfGraph;
+	    	sfGraph = graphPanels.sfGraph;
     	}catch (FileNotFoundException e){
-    		e.printStackTrace();
-    		graph = null;
+    		//e.printStackTrace();
+    		
+			JFrame frame = new JFrame("File Not Found");
+			JOptionPane.showMessageDialog(frame,
+					"Could not find the necessary files!\n"
+					+ "SU2 may not have executed properly.",
+					"Something went wrong! :(",
+					JOptionPane.ERROR_MESSAGE);
+    		
+    		sfGraph = null;
     	}
-    	Log log                      = executor.log;
     	
-    	mainView.tabs.update(log, graph);
+        //executor spits out a Jpanel (log) with console feedback on it
+    	Log log = executor.log;
+    	
+    	//Add new graph functionality by:
+    	// 1) Make graphPanels write the graph (in the constructor).
+    	// 2) Handle possible errors (the graph should == null).
+    	// 3) Change Tabs.update() so you can pass the graph to it.
+    	mainView.tabs.update(log, sfGraph);
     }
     
     public static Map<String, String> formatConfigs(ArrayList<String> p1data, Map<String, String> configs){

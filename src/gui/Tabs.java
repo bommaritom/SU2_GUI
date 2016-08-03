@@ -14,8 +14,8 @@ public class Tabs extends JTabbedPane{
 	
 	public MeshInput meshInput;
 	public Log log;
-	public JPanel graph;
-	
+	public JPanel sfGraph;
+  //public JPanel exampleGraph;
 	
 	public Tabs(MeshInput m){
 		setPreferredSize(new Dimension(700,400));
@@ -24,9 +24,10 @@ public class Tabs extends JTabbedPane{
 	}
 	
 	
-	public void update(Log l, JPanel g){
+	public void update(Log l, JPanel sf /**JPanel ex*/){
 		log    = l;
-		graph = g;
+		sfGraph = sf;
+	  //exampleGraph = ex;
 		
 		int numOfTabs = this.getTabCount();
 		
@@ -36,7 +37,8 @@ public class Tabs extends JTabbedPane{
 		for ( int i = 1; i < numOfTabs; i++) this.remove(1);
 		
 		if ( log != null ) addTab("Console", log);
-		if ( graph != null) addTab("Surface Pressure", g);
+		if ( sfGraph != null) addTab("Surface Pressure", sfGraph);
+	  //if ( exampleGraph != null) addTab("Example Graph", exampleGraph);
 		
 		
 		setSelectedIndex(1);

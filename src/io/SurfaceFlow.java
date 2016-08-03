@@ -6,14 +6,8 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.util.ArrayList;
 
-import javax.swing.JFrame;
-import javax.swing.JOptionPane;
-
-
 
 public class SurfaceFlow{
-	
-	private String csvFileName;
 	
 	public ArrayList<String> Global_Index      		= new ArrayList<String>();
 	public ArrayList<String> x_coord 				= new ArrayList<String>();
@@ -23,13 +17,11 @@ public class SurfaceFlow{
 	
 	public SurfaceFlow(String csvFileName) throws FileNotFoundException{
 		
-		this.csvFileName = csvFileName;
-		
 		BufferedReader br = null;
 		String line;
-		
+		br = new BufferedReader(new FileReader(csvFileName));
 		try{
-			br = new BufferedReader(new FileReader(csvFileName));
+			
 			while ((line = br.readLine()) != null){
 				
 				String[] point = line.split(", ");
@@ -60,13 +52,6 @@ public class SurfaceFlow{
 		
 	}
 	
-	public void sfError(){
-		JFrame frame = new JFrame("File Not Found");
-		JOptionPane.showMessageDialog(frame,
-				"Could not find " + csvFileName + "!\n"
-				+ "SU2 may not have executed properly.",
-				"Could not find " + csvFileName,
-				JOptionPane.ERROR_MESSAGE);
-	}
+	
 
 }

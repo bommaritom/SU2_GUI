@@ -6,12 +6,7 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.util.ArrayList;
 
-import javax.swing.JFrame;
-import javax.swing.JOptionPane;
-
 public class History {
-	
-	private String csvFileName;
 	
 	public ArrayList<String> Iteration                     	= new ArrayList<String>();
 	public ArrayList<String> CLift						    = new ArrayList<String>();
@@ -36,13 +31,11 @@ public class History {
 	
 	public History(String csvFileName) throws FileNotFoundException{
 		
-		this.csvFileName = csvFileName;
-		
 		BufferedReader br = null;
 		String line;
-		
+		br = new BufferedReader(new FileReader(csvFileName));
 		try{
-			br = new BufferedReader(new FileReader(csvFileName));
+			
 			int curLine = 0;
 			outerloop:
 			while ((line = br.readLine()) != null){
@@ -74,7 +67,7 @@ public class History {
 			}	
 			
 		} catch (IOException e) {
-			e.printStackTrace();
+			 e.printStackTrace();
 		} finally {
 			if (br != null) {
 				try {
@@ -86,13 +79,6 @@ public class History {
 		}
 	}
 	
-	public void hisError(){
-		JFrame frame = new JFrame("File Not Found");
-		JOptionPane.showMessageDialog(frame,
-				"Could not find " + csvFileName + "!\n"
-				+ "SU2 may not have executed properly.",
-				"Could not find " + csvFileName,
-				JOptionPane.ERROR_MESSAGE);
-	}
+	
 	
 }
