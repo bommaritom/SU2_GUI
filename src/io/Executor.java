@@ -1,6 +1,7 @@
 package io;
 
 import gui.Log;
+import utils.OSScanner;
 
 import java.io.*;
 
@@ -12,14 +13,18 @@ import java.io.*;
  *
  */
 public class Executor{
+	
 	public Log log;
 	
     public void run(){
         
     	deleteOldFiles();
     	
-        writeBash();
-        runBash();
+    	if (OSScanner.isMac() || OSScanner.isUnix()){
+	        runOnUnix();
+    	} else if (OSScanner.isWindows()){
+    		runOnWindows();
+    	}
         
         
         File shell = new File("run_bash_script.txt");
@@ -27,7 +32,17 @@ public class Executor{
         
     }
     
-    public void deleteOldFiles(){
+    private void runOnUnix(){
+    	writeBash();
+        runBash();
+        deleteBash();
+    }
+    
+    private void runOnWindows(){
+    	runDirectly();
+    }
+    
+    private void deleteOldFiles(){
     	deleteFile("su2/flow.dat");
     	deleteFile("su2/forces_breakdown.dat");
     	deleteFile("su2/history.dat");
@@ -36,12 +51,12 @@ public class Executor{
     	deleteFile("su2/surface_flow.dat");
     }
     
-    public void deleteFile(String fileName){
+    private void deleteFile(String fileName){
     	File file = new File(fileName);
     	file.delete();
     }
     
-    public void writeBash(){
+    private void writeBash(){
 		String shellFileName = "run_bash_script.txt";
 		        
         BufferedWriter bw = null;
@@ -61,14 +76,14 @@ public class Executor{
         }
 	}
     
-    public void runBash(){
+    private void runBash(){
     	try {
             
-            // run the SU2 executable command
-                
-            /** "--login" is necessary because some environment variables that 
-               SU2_CFD needs in order to execute properly are stored in
-               .bash_profile when the user correctly installs SU2.*/
+            /** 
+             * "--login" is necessary because the environment variables that 
+             *  SU2_CFD needs in order to execute properly are stored in
+             *  .bash_profile when the user correctly installs SU2.
+             */
         	
             String [] cmd = {"bash", "--login", "run_bash_script.txt"};
             
@@ -78,14 +93,38 @@ public class Executor{
 
             BufferedReader stdError = new BufferedReader(new 
                  InputStreamReader(p.getErrorStream()));
-            //String line = null;
-            log = new Log(stdInput, stdError);
             
-            //while ((line = stdInput.readLine()) != null) System.out.println(line);
-            //while ((line = stdError.readLine()) != null) System.out.println(line);
+            log = new Log(stdInput, stdError);
             
         }catch (IOException e){
             e.printStackTrace();
         }
     }
+    
+    private void deleteBash(){
+    	deleteFile("run_bash_script.txt");
+    }
+    
+    private void runDirectly(){
+    	try{
+    		
+    		/**
+    		 * On Windows, the SU2 environment variables have system-wide
+    		 * scope, so there is no need for a bash.
+    		 */
+    		String[] cmd = {"%SU2_RUN%SU2_CFD", "user_config.cfg"};
+    		Process p = Runtime.getRuntime().exec(cmd);
+            BufferedReader stdInput = new BufferedReader(new 
+                 InputStreamReader(p.getInputStream()));
+
+            BufferedReader stdError = new BufferedReader(new 
+                 InputStreamReader(p.getErrorStream()));
+            
+            log = new Log(stdInput, stdError);
+            
+        }catch (IOException e){
+            e.printStackTrace();
+    	}
+    }
+    
 }

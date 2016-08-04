@@ -2,7 +2,6 @@ package gui;
 
 import java.awt.Color;
 import java.io.FileNotFoundException;
-import java.util.HashMap;
 import java.util.Map;
 
 import javax.swing.JPanel;
@@ -45,13 +44,9 @@ public class GraphPanels{
 		surfaceFlow = new SurfaceFlow("su2/surface_flow.csv");
 		history	= new History("su2/history.dat");
 		
-		//create desired graphs
-		JPanel surfacePressurePanel = createSurfacePressurePanel();
-
-		//add the graphs
-		graphs = new HashMap<String, JPanel>();
-		graphs.put("Surface Pressure", surfacePressurePanel);
-		sfGraph = surfacePressurePanel;
+		sfGraph = createSurfacePressurePanel();
+		
+		
 		
 	}
 	
@@ -67,7 +62,7 @@ public class GraphPanels{
 		final XYPlot spPlot = new XYPlot(spData, null, spAxis, spRenderer);
 		spPlot.setRangeAxisLocation(AxisLocation.BOTTOM_OR_LEFT);
 		
-		//history.something.size()-1 refers to the last item in the arraylist
+		//history.something.size()-1 == last item in the arraylist
 		String CLift = history.CLift.get(history.CLift.size()-1);
 		String CDrag = history.CDrag.get(history.CDrag.size()-1);
 		String CMz = history.CMz.get(history.CMz.size()-1);

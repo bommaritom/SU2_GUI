@@ -9,7 +9,7 @@ public class Main {
 	
 	public static void main(String[] args){
 		setLAndF();
-		if (!OSScanner.isMac() && !OSScanner.isUnix()){
+		if (!OSScanner.isMac() && !OSScanner.isUnix() || true){
 			OSWarning();
 		}
 		new MainController();
@@ -18,8 +18,11 @@ public class Main {
 	public static void OSWarning(){
 		JFrame frame = new JFrame("Compatability Warning");
 		JOptionPane.showMessageDialog(frame,
-				"Your os may not be compatible with this software!",
-				"Compatability Warning",
+				"It appears you're running this software\n"
+				+ "on a Windows OS. Please note that Windows\n"
+				+ "functionality is not fully tested; there\n"
+				+ "may be bugs when interacting with your computer.",
+				"Windows Functionality",
 				JOptionPane.WARNING_MESSAGE);
 	}
 	
