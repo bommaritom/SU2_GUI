@@ -9,7 +9,7 @@ public class Main {
 	
 	public static void main(String[] args){
 		setLAndF();
-		if (!OSScanner.isMac() && !OSScanner.isUnix() || true){
+		if (!OSScanner.isMac() && !OSScanner.isUnix()){
 			OSWarning();
 		}
 		new MainController();
