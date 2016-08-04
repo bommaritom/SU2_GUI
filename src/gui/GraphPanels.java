@@ -75,7 +75,8 @@ public class GraphPanels{
 		final XYItemRenderer afRenderer = new StandardXYItemRenderer();
 		final NumberAxis afAxis = new NumberAxis("");
 		final XYPlot afPlot = new XYPlot(afData, null, afAxis, afRenderer);
-		Range range = afPlot.getDataRange(afAxis);
+		//Range range = afPlot.getDataRange(afAxis);
+		Range range = new Range(-.2,.2);
 		afAxis.setRange(range);
 		afPlot.setRangeAxisLocation(AxisLocation.TOP_OR_LEFT);
 		
@@ -135,7 +136,7 @@ public class GraphPanels{
 		for ( int i = 0; i < dataSize; i++ ){
 			double x_coord = Double.parseDouble(surfaceFlow.x_coord.get(i));
 			double y_coord = Double.parseDouble(surfaceFlow.y_coord.get(i));
-			a.add( x_coord, y_coord-2 );
+			a.add( x_coord, y_coord );
 		}
 		
 		return a;
