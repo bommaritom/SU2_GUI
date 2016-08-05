@@ -7,11 +7,13 @@ import java.util.*;
 
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
-import javax.swing.JPanel;
+
+import org.jfree.chart.ChartPanel;
 
 import gui.GraphPanels;
 import gui.Log;
 import gui.MainView;
+import gui.Stats;
 import io.Config;
 import io.Executor;
 import io.Mesh;
@@ -20,6 +22,10 @@ import io.SU2Input;
 public class MainController{
     
 	public MainView mainView = new MainView();
+	public Stats stats;
+	public GraphPanels graphPanels;
+	
+	
 	
     /**This method is invoked by a button on the user input (options) window.  It is fed
      * 1: the window from which to gather data, and 2: The original map of parameters.
@@ -29,8 +35,11 @@ public class MainController{
 		initViewActionListeners();
 	}
 	
-	public void initViewActionListeners(){
-		mainView.initButtons(new DefListener(), new SaveListener(), new RunListener());
+	private void initViewActionListeners(){
+		mainView.initButtons(new DefListener(), 
+							 new SaveListener(), 
+							 new RunListener(),
+							 new NewListener());
 		
 	}
 	
@@ -52,11 +61,35 @@ public class MainController{
 		@Override
 		public void actionPerformed(ActionEvent e) {
 			saveData();
-			run();
+			run(false);
 		}
 	}
 	
-    public void saveData(){
+	public class NewListener implements ActionListener{
+		@Override
+		public void actionPerformed(ActionEvent e){
+			int n;
+			if (mainView.tabs.getTabCount() > 1){
+				n = JOptionPane.showOptionDialog(
+					new JFrame("Confirm"),
+					"Do you really want to start a new graph?",
+					"Confirm",
+					JOptionPane.YES_NO_OPTION,
+					JOptionPane.QUESTION_MESSAGE,
+					null,
+					new Object[]{"Cancel", "Yes"},
+					"Yes");
+			}else{
+				n = 1;
+			}
+			if (n == 1){
+				saveData();
+				run(true);
+			}
+		}
+	}
+	
+    private void saveData(){
         
     	SU2Input rawData = mainView.getData();
     	
@@ -76,38 +109,51 @@ public class MainController{
         
     }
     
-    public void run(){
+    private void run(Boolean overwrite){
     	Executor executor = new Executor();
     	executor.run();
     	
-    	JPanel sfGraph;
-    	try{
-	    	GraphPanels graphPanels     = new GraphPanels();
-	    	sfGraph = graphPanels.sfGraph;
-    	}catch (FileNotFoundException e){
-    		//e.printStackTrace();
-    		
-			JFrame frame = new JFrame("File Not Found");
-			JOptionPane.showMessageDialog(frame,
-					"Could not find the necessary files!\n"
-					+ "SU2 may not have executed properly.",
-					"Something went wrong! :(",
-					JOptionPane.ERROR_MESSAGE);
-    		
-    		sfGraph = null;
+    	ChartPanel sfGraph = null;
+    	if (overwrite || graphPanels == null){
+	    	try{
+		    	graphPanels = new GraphPanels();
+		    	sfGraph = graphPanels.sfGraph;
+	    	}catch (FileNotFoundException e){
+	    		//e.printStackTrace();
+	    		showRunErrorMessage();
+	    	}
+	    	
+    	} else if (!overwrite) {
+    		try{
+    			graphPanels.addNewSurfacePressureData();
+    			sfGraph = graphPanels.sfGraph;
+    		}catch (FileNotFoundException e){
+    			//e.printStackTrace();
+    			showRunErrorMessage();
+    		}
     	}
-    	
-        //executor spits out a Jpanel (log) with console feedback on it
+    	//executor spits out a Jpanel (log) with console feedback on it
     	Log log = executor.log;
-    	
-    	//Add new graph functionality by:
-    	// 1) Make graphPanels write the graph (in the constructor).
-    	// 2) Handle possible errors (the graph should == null).
-    	// 3) Change Tabs.update() so you can pass the graph to it.
     	mainView.tabs.update(log, sfGraph);
+    	
+    	if (overwrite || stats == null){
+    		stats = new Stats();
+    		stats.updateStats();
+    	}else if (!overwrite && stats != null){
+    		stats.updateStats();
+    	}
     }
     
-    public static Map<String, String> formatConfigs(ArrayList<String> p1data, Map<String, String> configs){
+    private static void showRunErrorMessage(){
+    	JFrame frame = new JFrame("File Not Found");
+		JOptionPane.showMessageDialog(frame,
+				"Could not find the necessary files!\n"
+				+ "SU2 may not have executed properly.",
+				"Something went wrong! :(",
+				JOptionPane.ERROR_MESSAGE);
+    }
+    
+    private static Map<String, String> formatConfigs(ArrayList<String> p1data, Map<String, String> configs){
     	int cur = 0;
         for ( Map.Entry<String, String> entry: configs.entrySet() ) {
             configs.put(entry.getKey(), p1data.get(cur));

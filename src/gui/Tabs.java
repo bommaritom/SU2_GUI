@@ -2,8 +2,9 @@ package gui;
 
 import java.awt.Dimension;
 
-import javax.swing.JPanel;
 import javax.swing.JTabbedPane;
+
+import org.jfree.chart.ChartPanel;
 
 public class Tabs extends JTabbedPane{
 	
@@ -14,33 +15,30 @@ public class Tabs extends JTabbedPane{
 	
 	public MeshInput meshInput;
 	public Log log;
-	public JPanel sfGraph;
-  //public JPanel exampleGraph;
+	public ChartPanel sfGraph;
 	
 	public Tabs(MeshInput m){
-		setPreferredSize(new Dimension(700,400));
+		setPreferredSize(new Dimension(700,430));
 		meshInput = m;
 		addTab("Mesh", meshInput);
 	}
 	
 	
-	public void update(Log l, JPanel sf /**JPanel ex*/){
+	public void update(Log l, ChartPanel sf){
 		log    = l;
 		sfGraph = sf;
-	  //exampleGraph = ex;
 		
 		int numOfTabs = this.getTabCount();
 		
-		//remove all tabs except the user input mesh
-		//need to remove the tab at index 1 each time because
-		//the tabs "slide" over each time you remove one
-		for ( int i = 1; i < numOfTabs; i++) this.remove(1);
+		if ( log != null ){
+			if (numOfTabs > 1) this.remove(1);
+			this.insertTab("Console", null, log, "Console", 1);
+		}
+		if ( sfGraph != null){
+			if (numOfTabs > 2) this.remove(2);
+			this.insertTab("Surface Pressure", null, sfGraph, "Surface Pressure", 2);
+		}
 		
-		if ( log != null ) addTab("Console", log);
-		if ( sfGraph != null) addTab("Surface Pressure", sfGraph);
-	  //if ( exampleGraph != null) addTab("Example Graph", exampleGraph);
-		
-		
-		setSelectedIndex(1);
+		setSelectedIndex(this.getTabCount()-1);
 	}
 }

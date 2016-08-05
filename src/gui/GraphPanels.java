@@ -1,14 +1,11 @@
 package gui;
 
+import java.awt.BasicStroke;
 import java.awt.Color;
 import java.io.FileNotFoundException;
-import java.util.Map;
-
-import javax.swing.JPanel;
 
 import org.jfree.chart.ChartPanel;
 import org.jfree.chart.JFreeChart;
-import org.jfree.chart.annotations.XYTextAnnotation;
 import org.jfree.chart.axis.AxisLocation;
 import org.jfree.chart.axis.NumberAxis;
 import org.jfree.chart.plot.CombinedDomainXYPlot;
@@ -21,7 +18,6 @@ import org.jfree.data.Range;
 import org.jfree.data.xy.XYSeries;
 import org.jfree.data.xy.XYSeriesCollection;
 
-import io.History;
 import io.SurfaceFlow;
 
 /**
@@ -33,40 +29,43 @@ import io.SurfaceFlow;
 public class GraphPanels{
 	
 	private SurfaceFlow surfaceFlow;
-	private History history;
 	
-	public Map<String, JPanel> graphs;
-	public JPanel sfGraph;
+	public ChartPanel sfGraph;
+	public CombinedDomainXYPlot plot;
+	public XYPlot spPlot;
+	public XYSeriesCollection spData;
     
+	
+	//JFreeChart hierarchy:
+	//ChartPanel > CombinedDomainXYPlot > XYPlot > XYSeriesCollection > XYSeries
 	
 	public GraphPanels() throws FileNotFoundException{
 		
-		surfaceFlow = new SurfaceFlow("su2/surface_flow.csv");
-		history	= new History("su2/history.dat");
-		
-		sfGraph = createSurfacePressurePanel();
-		
-		
+		addNewSurfacePressureData();
 		
 	}
 	
+	public void addNewSurfacePressureData() throws FileNotFoundException{
+		
+		surfaceFlow = new SurfaceFlow("su2/surface_flow.csv");
+		sfGraph = updateSurfacePressurePanel();
+		sfGraph.repaint();
+		sfGraph.revalidate();
+		
+	}
 	
-	
-	private ChartPanel createSurfacePressurePanel(){
+	private ChartPanel updateSurfacePressurePanel(){
 		
 		//surface pressure subplot
-		final XYSeriesCollection spData = new XYSeriesCollection();
-		spData.addSeries(pressure());
+		if (spData == null){
+			spData = new XYSeriesCollection();
+		}
+		spData.addSeries(pressureUpper());
+		spData.addSeries(pressureLower());
 		final XYItemRenderer spRenderer = new StandardXYItemRenderer();
 		final NumberAxis spAxis = new NumberAxis("-Cp");
 		final XYPlot spPlot = new XYPlot(spData, null, spAxis, spRenderer);
 		spPlot.setRangeAxisLocation(AxisLocation.BOTTOM_OR_LEFT);
-		
-		//history.something.size()-1 == last item in the arraylist
-		String CLift = history.CLift.get(history.CLift.size()-1);
-		String CDrag = history.CDrag.get(history.CDrag.size()-1);
-		String CMz = history.CMz.get(history.CMz.size()-1);
-		
 		
 		
 		//airfoil subplot
@@ -80,14 +79,8 @@ public class GraphPanels{
 		afAxis.setRange(range);
 		afPlot.setRangeAxisLocation(AxisLocation.TOP_OR_LEFT);
 		
-		Double axis = (range.getLowerBound() + range.getUpperBound())/2;
-		Double axisSpan = (range.getUpperBound() - range.getLowerBound());
-		
-		afPlot.addAnnotation(new XYTextAnnotation("CLift: " + CLift, /**/ 0.25, axis + (axisSpan/4)));
-		afPlot.addAnnotation(new XYTextAnnotation("CDrag: " + CDrag, /**/ 0.25, axis));
-		afPlot.addAnnotation(new XYTextAnnotation("CMz: " + CMz,     /**/ 0.25, axis - (axisSpan/4)));
 		//parent plot
-		final NumberAxis domainAxis = new NumberAxis("Airfoil");
+		final NumberAxis domainAxis = new NumberAxis("Upper = Solid - Lower = Dotted");
 		final CombinedDomainXYPlot plot = new CombinedDomainXYPlot(domainAxis);
 		plot.setGap(10.0);
 		
@@ -101,7 +94,23 @@ public class GraphPanels{
 		//style
 		XYLineAndShapeRenderer renderer = new XYLineAndShapeRenderer();
 		renderer.setBaseShapesVisible(false);
-		renderer.setSeriesPaint(0, Color.BLACK);
+		for (int i = 0; i < spPlot.getSeriesCount(); i++){
+			renderer.setSeriesPaint(i, Color.BLACK);
+		}
+		/**last two plots (newest) are red*/
+		if (spPlot.getSeriesCount() > 2){
+			renderer.setSeriesPaint(spPlot.getSeriesCount()-2, Color.RED);
+			renderer.setSeriesPaint(spPlot.getSeriesCount()-1, Color.RED);
+		}
+		for (int i = 1; i < spPlot.getSeriesCount(); i+=2){
+			renderer.setSeriesStroke(
+				i,
+				new BasicStroke(
+			        1.0f, BasicStroke.CAP_ROUND, BasicStroke.JOIN_ROUND,
+			        10.0f, new float[] {6.0f, 6.0f}, 0.5f
+					)		
+			);
+		}
 		plot.setRenderer(renderer);
 		plot.setBackgroundPaint(Color.WHITE);
 		plot.setDomainGridlinePaint(Color.BLACK);
@@ -128,11 +137,14 @@ public class GraphPanels{
 	
 	
 	//data 
+	
 	private XYSeries airfoil(){
 		
 		final XYSeries a = new XYSeries( "Airfoil", /**connect "left to right"*/ false, /**allow duplicates*/ true);
 		
 		int dataSize = surfaceFlow.Global_Index.size();
+		
+		
 		for ( int i = 0; i < dataSize; i++ ){
 			double x_coord = Double.parseDouble(surfaceFlow.x_coord.get(i));
 			double y_coord = Double.parseDouble(surfaceFlow.y_coord.get(i));
@@ -142,12 +154,29 @@ public class GraphPanels{
 		return a;
 	}
 	
-	private XYSeries pressure(){
+	private Boolean firstHalfIsUpper(){
+		int dataSize = surfaceFlow.Global_Index.size();
+		int quarter = Math.round(dataSize/4);
+		return (Double.parseDouble(surfaceFlow.y_coord.get(quarter)) > Double.parseDouble(surfaceFlow.y_coord.get(dataSize-quarter)));
+	}
+	
+	private XYSeries pressureUpper(){
 		
-		final XYSeries s = new XYSeries( "Pressure", false, true );
+		final XYSeries s = new XYSeries( "Pressure" + Math.random(), false, true );
 		
 		int dataSize = surfaceFlow.Global_Index.size();
-		for ( int i = 0; i < dataSize; i++ ){
+		
+		int start;
+		int end;
+		if (firstHalfIsUpper()){
+			start = 0;
+			end = Math.round(dataSize/2);
+		} else {
+			start = Math.round(dataSize/2);
+			end = dataSize;
+		}
+		
+		for ( int i = start; i < end; i++ ){
 			double x_coord = Double.parseDouble(surfaceFlow.x_coord.get(i));
 			double Pressure_Coefficient = Double.parseDouble(surfaceFlow.Pressure_Coefficient.get(i));
 			s.add( x_coord, -Pressure_Coefficient );
@@ -155,4 +184,30 @@ public class GraphPanels{
 		
 		return s;
 	}
+	
+	private XYSeries pressureLower(){
+		
+		final XYSeries s = new XYSeries( "Pressure" + Math.random(), false, true );
+		
+		int dataSize = surfaceFlow.Global_Index.size();
+		
+		int start;
+		int end;
+		if (!firstHalfIsUpper()){
+			start = 0;
+			end = Math.round(dataSize/2);
+		} else {
+			start = Math.round(dataSize/2);
+			end = dataSize;
+		}
+		
+		for ( int i = start; i < end; i++ ){
+			double x_coord = Double.parseDouble(surfaceFlow.x_coord.get(i));
+			double Pressure_Coefficient = Double.parseDouble(surfaceFlow.Pressure_Coefficient.get(i));
+			s.add( x_coord, -Pressure_Coefficient );
+		}
+		
+		return s;
+	}
+	
 }

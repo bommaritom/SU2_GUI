@@ -31,6 +31,7 @@ public class MainView extends JFrame{
     public JButton d;
     public JButton s;
     public JButton b;
+    public JButton n;
     
     public Map<String, String> params;
     
@@ -60,8 +61,12 @@ public class MainView extends JFrame{
         	p0.add(tboxPanel, c);
     	}
     	configInput.updateParams(params);
+    	pack();
     	repaint();
     	revalidate();
+        p0.setPreferredSize(p0.getMinimumSize());
+        setMinimumSize(this.getSize());
+    	
     	
     }
     
@@ -117,7 +122,7 @@ public class MainView extends JFrame{
         c.insets = new Insets(5,5,5,5);
         p0.add(configInput, c);
         
-        c.gridheight = 6;
+        c.gridheight = 7;
         c.gridx = 1;
         c.gridy = 0;
         c.anchor = GridBagConstraints.CENTER;
@@ -172,18 +177,26 @@ public class MainView extends JFrame{
         
     }
     
-    public void initButtons(ActionListener defListener, ActionListener saveListener, ActionListener runListener){
+    public void initButtons(ActionListener defListener, 
+    						ActionListener saveListener, 
+    						ActionListener runListener,
+    						ActionListener newListener){
     	d = new JButton("Use Defaults");
         d.setPreferredSize(new Dimension(140, 30));
         d.addActionListener(defListener);
         
-        s = new JButton("Save Data");
+        s = new JButton("Save Inputs");
         s.setPreferredSize(new Dimension(140, 30));
         s.addActionListener(saveListener);
         
         b = new JButton("Run SU2!");
         b.setPreferredSize(new Dimension(140, 30));
         b.addActionListener(runListener);
+        
+        n = new JButton("Run as New");
+        n.setPreferredSize(new Dimension(140, 30));
+        n.addActionListener(newListener);
+        
         
         GridBagConstraints c = new GridBagConstraints();
         c.gridheight = 1;
@@ -208,6 +221,12 @@ public class MainView extends JFrame{
         
         p0.add(b, c);
         
+        c.gridx = 0;
+        c.gridy = 6;
+        c.anchor = GridBagConstraints.PAGE_START;
+        c.insets = new Insets(2,0,0,0);
+        
+        p0.add(n, c);
         
         p0.repaint();
         p0.revalidate();

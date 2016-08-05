@@ -7,6 +7,15 @@ import utils.OSScanner;
 
 public class Main {
 	
+	/**
+	 * 
+	 * TODO: Write new data onto same graph (optionally).
+	 * 		 Upper/lower, different colors
+	 * 	     Angle, CL, CD, CM in separate table
+	 * 
+	 * @param args
+	 */
+	
 	public static void main(String[] args){
 		setLAndF();
 		if (!OSScanner.isMac() && !OSScanner.isUnix()){
