@@ -55,6 +55,7 @@ public class Stats extends JFrame{
 		setAlwaysOnTop(true);
 		setLocationByPlatform(true);
 		setVisible(true);
+		
 	};
 	
 	public void updateStats(){

@@ -142,6 +142,8 @@ public class MainController{
     	}else if (!overwrite && stats != null){
     		stats.updateStats();
     	}
+    	mainView.toFront();
+    	System.out.println(mainView.toString()); //just because. why not?
     }
     
     private static void showRunErrorMessage(){
