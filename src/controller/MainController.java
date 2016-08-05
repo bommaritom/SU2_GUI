@@ -113,6 +113,8 @@ public class MainController{
     	Executor executor = new Executor();
     	executor.run();
     	
+    	Boolean update = true;
+    	
     	ChartPanel sfGraph = null;
     	if (overwrite || graphPanels == null){
 	    	try{
@@ -121,6 +123,7 @@ public class MainController{
 	    	}catch (FileNotFoundException e){
 	    		//e.printStackTrace();
 	    		showRunErrorMessage();
+	    		update = false;
 	    	}
 	    	
     	} else if (!overwrite) {
@@ -130,20 +133,27 @@ public class MainController{
     		}catch (FileNotFoundException e){
     			//e.printStackTrace();
     			showRunErrorMessage();
+    			update = false;
     		}
     	}
     	//executor spits out a Jpanel (log) with console feedback on it
     	Log log = executor.log;
     	mainView.tabs.update(log, sfGraph);
     	
-    	if (overwrite || stats == null){
-    		stats = new Stats();
-    		stats.updateStats();
-    	}else if (!overwrite && stats != null){
-    		stats.updateStats();
+    	if (update){
+	    	if (overwrite || stats == null){
+	    		if (stats == null){
+	    			stats = new Stats();
+	    		}else{
+	    			stats.clear();
+	    		}
+	    		stats.updateStats();
+	    	}else if (!overwrite && stats != null){
+	    		stats.updateStats();
+	    	}
     	}
     	mainView.toFront();
-    	System.out.println(mainView.toString()); //just because. why not?
+    	
     }
     
     private static void showRunErrorMessage(){

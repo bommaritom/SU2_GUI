@@ -32,7 +32,7 @@ public class Stats extends JFrame{
 	public Stats(){
 		p = new JPanel();
 		
-		m = new JTextArea(20, 60);
+		m = new JTextArea(20, 40);
         m.setLineWrap(true);
         m.setWrapStyleWord(true);
         m.setEditable(false);
@@ -63,6 +63,10 @@ public class Stats extends JFrame{
 		cleanUpData();
 		m.append(Mach + " | " + AoA + " | " + CLift + " | " + CDrag + " | " + CMz + "\n");
 		setVisible(true); //just in case
+	}
+	
+	public void clear(){
+		m.setText("Mach Number|Angle of Attack|       CLift       |      CDrag      |      Cmz\n");
 	}
 	
 	private void fetchData(){
