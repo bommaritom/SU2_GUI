@@ -228,6 +228,8 @@ public class MainView extends JFrame{
         
         p0.add(n, c);
         
+        p0.getRootPane().setDefaultButton(b);
+        
         p0.repaint();
         p0.revalidate();
         
