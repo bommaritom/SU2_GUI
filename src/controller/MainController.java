@@ -31,33 +31,40 @@ public class MainController{
      * 1: the window from which to gather data, and 2: The original map of parameters.
      */
 	
-	public MainController(){
+	public MainController()
+	{
 		initViewActionListeners();
 	}
 	
-	private void initViewActionListeners(){
+	private void initViewActionListeners()
+	{
 		mainView.initButtons(new DefListener(), 
-							 new SaveListener(), 
-							 new RunListener(),
-							 new NewListener());
+				     new SaveListener(), 
+			             new RunListener(),
+				     new NewListener());
 		
 	}
 	
-	public class DefListener implements ActionListener{
+	//when the "defaults" button is pressed, tells @mainView to load default parameters
+	public class DefListener implements ActionListener
+	{
 		@Override
 		public void actionPerformed(ActionEvent e) {
 			mainView.configInput.loadDefaults();
 		}
 	}
 	
-	public class SaveListener implements ActionListener{
+	//when the "save" button is pressed, saves the data
+	public class SaveListener implements ActionListener
+	{
 		@Override
 		public void actionPerformed(ActionEvent e) {
 			saveData();
 		}
 	}
 	
-	public class RunListener implements ActionListener{
+	public class RunListener implements ActionListener
+	{
 		@Override
 		public void actionPerformed(ActionEvent e) {
 			saveData();
@@ -65,7 +72,8 @@ public class MainController{
 		}
 	}
 	
-	public class NewListener implements ActionListener{
+	public class NewListener implements ActionListener
+	{
 		@Override
 		public void actionPerformed(ActionEvent e){
 			int n;
@@ -89,18 +97,20 @@ public class MainController{
 		}
 	}
 	
-    private void saveData(){
+    private void saveData()
+    {
         
     	SU2Input rawData = mainView.getData();
     	
-    	//formatConfigs wraps data in a format that Config can 
-    	//easily write to the user_config.cfg file
+    	/**formatConfigs wraps data in a format that Config can 
+    	 * easily write to the user_config.cfg file */
         Map<String, String> configs = formatConfigs(rawData.p1data, mainView.params);
         
-        
+        //retrieves the options that the user has selected from the dropdown menus
         String problemType = (String)mainView.problemBox.getSelectedItem();
         String turbModel = (String)mainView.turbBox.getSelectedItem();
         
+	//retrieves the raw "mesh" data as one long string
         String mesh = rawData.p2data;
         
         //all inputs are then passed to the config and mesh file writers
@@ -109,13 +119,17 @@ public class MainController{
         
     }
     
-    private void run(Boolean overwrite){
+    private void run(Boolean overwrite)
+    {
     	Executor executor = new Executor();
     	executor.run();
     	
     	Boolean update = true;
     	
+	
     	ChartPanel sfGraph = null;
+	    
+	
     	if (overwrite || graphPanels == null){
 	    	try{
 		    	graphPanels = new GraphPanels();
@@ -156,7 +170,8 @@ public class MainController{
     	
     }
     
-    private static void showRunErrorMessage(){
+    private static void showRunErrorMessage()
+    {
     	JFrame frame = new JFrame("File Not Found");
 		JOptionPane.showMessageDialog(frame,
 				"Could not find the necessary files!\n"
@@ -165,7 +180,8 @@ public class MainController{
 				JOptionPane.ERROR_MESSAGE);
     }
     
-    private static Map<String, String> formatConfigs(ArrayList<String> p1data, Map<String, String> configs){
+    private static Map<String, String> formatConfigs(ArrayList<String> p1data, Map<String, String> configs)
+    {
     	int cur = 0;
         for ( Map.Entry<String, String> entry: configs.entrySet() ) {
             configs.put(entry.getKey(), p1data.get(cur));
