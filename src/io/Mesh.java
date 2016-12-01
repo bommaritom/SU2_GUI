@@ -2,10 +2,13 @@ package io;
  
 import java.io.*;
 
+//interacts with the mesh file
 public class Mesh{
-	
+
+    //copies @data into the mesh file (user_mesh.su2)
     public static void write(String data){
     
+	//do not change!!!!!!!
         String fileName = "su2/user_mesh.su2";
 
         BufferedWriter bw = null;
@@ -26,6 +29,7 @@ public class Mesh{
         }
     }
     
+    //returns the contents of the mesh file in one long string
     public static String load(){
         
         File meshFile = new File("su2/user_mesh.su2"); /**As referred to in default_conf.cfg*/
