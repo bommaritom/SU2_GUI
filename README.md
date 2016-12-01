@@ -12,10 +12,12 @@ You will need to have installed SU2 (guide for installation can be found on http
 
 Place SU2_GUI.jar and the folder su2 (which will be the location of all SU2-native resources involved) in the same directory.
 
+The bin files are probably outdated.  If you want the latest version, which may contain bugs, you will need to download the src files and compile them.
+
 --Todo--
 
 Add compatibility with Windows.  This means editing methods which run command-line functions and which access and edit files.
 
 --Bugs--
 
-Found a bug? Email me at marcobommarito9@gmail.com with a description of the bug and how to replicate it.
+Found a bug? Email me at marcobommarito9@gmail.com with a description of the bug.
