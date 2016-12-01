@@ -24,20 +24,21 @@ public class MainView extends JFrame{
 	public JComboBox<String> problemBox;
 	public JPanel tboxPanel;
 	public JComboBox<String> turbBox;
-    public ConfigInput configInput;
-    public Tabs tabs;
-    public MeshInput meshInput;
+    	public ConfigInput configInput;
+    	public Tabs tabs;
+    	public MeshInput meshInput;
+   
+	public JButton d;
+    	public JButton s;
+   	public JButton b;
+ 	public JButton n;
     
-    public JButton d;
-    public JButton s;
-    public JButton b;
-    public JButton n;
+    	public Map<String, String> params;
     
-    public Map<String, String> params;
+    	public GridBagConstraints c = new GridBagConstraints();
     
-    public GridBagConstraints c = new GridBagConstraints();
-    
-    
+    //todo: move this method to the controller class
+	//not copy and paste.  move location while maintaining functionality
     public class ProblemActionListener implements ActionListener{
     	@SuppressWarnings("unchecked")
 		@Override
