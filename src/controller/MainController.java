@@ -19,9 +19,10 @@ import io.Executor;
 import io.Mesh;
 import io.SU2Input;
 
+// class MainController is designed to react to button presses and to call upon other classes.
 public class MainController{
     
-	public MainView mainView = new MainView();
+	public MainView mainView;
 	public Stats stats;
 	public GraphPanels graphPanels;
 	
@@ -33,6 +34,7 @@ public class MainController{
 	
 	public MainController()
 	{
+		mainView = new MainView();
 		initViewActionListeners();
 	}
 	
@@ -63,6 +65,7 @@ public class MainController{
 		}
 	}
 	
+	//when the "run SU2" button is pressed, saves the data and then runs, with parameter @overwrite set to false
 	public class RunListener implements ActionListener
 	{
 		@Override
@@ -119,6 +122,7 @@ public class MainController{
         
     }
     
+    //@overwrite determines whether or not the graph will be overwritten, or if a new line will simply be drawn
     private void run(Boolean overwrite)
     {
     	Executor executor = new Executor();
