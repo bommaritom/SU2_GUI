@@ -6,6 +6,7 @@ import io.Mesh;
 
 import java.awt.*;
 
+//textbox where the user pastes the mesh data
 public class MeshInput extends JPanel{
     
     /**
