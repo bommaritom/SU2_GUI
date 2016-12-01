@@ -3,6 +3,7 @@ package io;
 import java.util.*;
 import java.io.*;
 
+//This class serves as a means of parsing the user's entries into the file su2/user_conf.cfg
 public class Config{
 	
     public static void write(Map<String, String> data, String problemType, String turbModel){
