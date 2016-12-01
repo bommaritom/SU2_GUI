@@ -6,15 +6,14 @@ import utils.OSScanner;
 import java.io.*;
 
 /**
- * SU2 relies on command-line prompts. This class helps interface between
+ * SU2 is built entirely around command-line prompts. This class helps interface between
  * the GUI and the OS-native command-line console.  Currently only works
  * on Unix-based systems.
- * @author marcobom
  *
  */
 public class Executor{
 	
-	public Log log;
+    public Log log;
 	
     public void run(){
         
@@ -23,6 +22,7 @@ public class Executor{
     	if (OSScanner.isMac() || OSScanner.isUnix()){
 	        runOnUnix();
     	} else if (OSScanner.isWindows()){
+		//may not work
     		runOnWindows();
     	}
         
@@ -32,12 +32,14 @@ public class Executor{
         
     }
     
+    //writes and runs a bash file to execute SU2, mimics a user-inputted command-line prompt
     private void runOnUnix(){
     	writeBash();
         runBash();
         deleteBash();
     }
     
+    //windows functionality is a work in progress
     private void runOnWindows(){
     	runDirectly();
     }
@@ -105,6 +107,7 @@ public class Executor{
     	deleteFile("run_bash_script.txt");
     }
     
+    //this method may not work
     private void runDirectly(){
     	try{
     		
