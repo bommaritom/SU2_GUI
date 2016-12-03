@@ -2,7 +2,8 @@
 
 --Description--
 
-This project is designed to provide an easy and user-friendly interface to SU2. With this software, the user can easily solve a variety of surface-flow equations and get immediate visual feedback. It currently supports Unix-based operating systems.
+This project is designed to provide an easy and user-friendly interface to SU2. With this software, the user can easily solve many of surface-flow equations and get immediate visual feedback. It currently supports Unix-based operating systems.
+
 
 --Installation--
 
@@ -14,9 +15,16 @@ Place SU2_GUI.jar and the folder su2 (which will be the location of all SU2-nati
 
 The bin files are probably outdated.  If you want the latest version, which may contain bugs, you will need to download the src files and compile them.
 
+
+--JFreeChart Documentation--
+
+http://www.jfree.org/jfreechart/api/javadoc/index.html
+
+
 --Todo--
 
 Add compatibility with Windows.  This means editing methods which run command-line functions and which access and edit files.
+
 
 --Bugs--
 
