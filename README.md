@@ -9,11 +9,9 @@ This project is designed to provide an easy and user-friendly interface to SU2. 
 
 This software is an interface for <strong>SU2</strong>.
 
-You will need to have installed SU2 (guide for installation can be found on https://github.com/su2code/SU2/wiki/Build-from-Source), including assigning the environment variables.
+You will need to have installed SU2 (guide for installation can be found on https://github.com/su2code/SU2/wiki/Build-from-Source), including assigning the environment variables. 
 
 Place SU2_GUI.jar and the folder su2 (where user input is saved) in one directory.
-
-The bin files are probably outdated.  If you want the latest version, which may contain bugs, you will need to download the src files and compile them.
 
 
 --JFreeChart Documentation--
